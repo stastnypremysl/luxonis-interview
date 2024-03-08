@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16.2
+    ports:
+      - 127.0.0.1:5432:5432
+
+    environment:
+      POSTGRES_PASSWORD: example
+
+  arch:
+    build:
+      context:
+        ./arch
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      - postgres
+    environment:
+      PGUSER: postgres
+      PGHOST: postgres
+      PGPORT: 5432
+      PGPASSWORD: example

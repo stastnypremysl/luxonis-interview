@@ -1,0 +1,12 @@
+#!/bin/bash
+scrapy runspider /scrape.py -O /flats.csv 
+
+psql postgresql://postgres -c "CREATE TABLE flats (id SERIAL, name VARCHAR(255), img VARCHAR(255));"
+psql postgresql://postgres -c "DELETE FROM flats;"
+psql postgresql://postgres -c "COPY flats (name, img) FROM stdin DELIMITER ',' CSV HEADER;" </flats.csv
+
+echo Initialization complete
+
+python3 /http-server.py >&2
+
+
